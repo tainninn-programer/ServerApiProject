@@ -1,0 +1,20 @@
+@host = http://localhost:5224
+
+### 一覧
+GET {{host}}/items
+
+### 追加
+POST {{host}}/items
+Content-Type: application/json
+
+{"name": "melon"}
+
+### 名前の変更
+PATCH {{host}}/items/582549382990B0F639C10ADD9D920C34
+Content-Type: application/json
+
+{"name": ""}
+
+### 削除
+DELETE {{host}}/items/3780DDFD8DB203D72900C608EE7A8A57
+
