@@ -1,7 +1,7 @@
 @host = http://localhost:5224
 
 ### 一覧
-GET {{host}}/items
+GET {{host}}/items/abc
 
 ### 追加
 POST {{host}}/items
