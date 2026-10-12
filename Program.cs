@@ -47,9 +47,9 @@ app.MapPost("/items", IResult(SimpleItem value) =>
     }
 });
 
-app.MapPatch("/items/{id}", IResult(string id, Item item) =>
+app.MapPatch("/items/{id}", IResult(string id, SimpleItem value) =>
 {
-    if (string.IsNullOrWhiteSpace(item.Name))
+    if (string.IsNullOrWhiteSpace(value.Name))
     {
         var errors = new Dictionary<string, string[]>
         {
@@ -68,7 +68,7 @@ app.MapPatch("/items/{id}", IResult(string id, Item item) =>
     {
         int index = items.FindIndex(e => e.Id == id);
 
-        Item patchItem = new Item(item.Id, item.Name);
+        Item patchItem = new Item(id, value.Name);
         items[index] = patchItem;
         Console.WriteLine("アイテムを新しいインスタンスに差し替えました。");
         return Results.Ok();
