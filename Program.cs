@@ -58,7 +58,7 @@ app.MapPatch("/items/{id}", IResult(int id, SimpleItem value, ApplicationDbConte
 
     changeItem.Name = value.Name;
     db.SaveChanges();
-    return Results.Ok();
+    return Results.NoContent();
 });
 
 app.MapDelete("/items/{id}", IResult(int id, ApplicationDbContext db) =>
