@@ -1,33 +1,45 @@
-# 値を変えるときは、ここだけ書き換える
+# ===== 引数（ここを書き換えてから、下の各リクエストを送る） =====
 @host = http://localhost:5224
-@id = 1
-@name = melon
-@newName = orange
+
+# 1件取得
+@getId = 1
+
+# 追加
+@postName = melon
+
+# 名前の変更
+@patchId = 1
+@patchName = orange
+
+# 削除
+@deleteId = 1
+
+# ===== リクエスト =====
 
 ### 一覧
 GET {{host}}/items
 
 ### 1件取得
-GET {{host}}/items/{{id}}
+GET {{host}}/items/{{getId}}
 
 ### 追加
 POST {{host}}/items
 Content-Type: application/json
 
-{"name": "{{name}}"}
+{"name": "{{postName}}"}
 
 ### 名前の変更
-PATCH {{host}}/items/{{id}}
+PATCH {{host}}/items/{{patchId}}
 Content-Type: application/json
 
-{"name": "{{newName}}"}
+{"name": "{{patchName}}"}
 
 ### 削除
-DELETE {{host}}/items/{{id}}
+DELETE {{host}}/items/{{deleteId}}
 
-### --- 異常系 ---
+# ===== 異常系（値は固定） =====
 
-### 存在しないid
+### 存在しないid → 404
 GET {{host}}/items/999
 
 ### 数字でないid
