@@ -1,7 +1,7 @@
 @host = http://localhost:5224
 
 ### 一覧
-GET {{host}}/items/
+GET {{host}}/items/2
 
 ### 追加
 POST {{host}}/items
@@ -16,5 +16,5 @@ Content-Type: application/json
 {"name": "orangein"}
 
 ### 削除
-DELETE {{host}}/items/3780DDFD8DB203D72900C608EE7A8A57
+DELETE {{host}}/items/3
 

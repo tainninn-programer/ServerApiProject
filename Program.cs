@@ -1,6 +1,4 @@
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +7,6 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-var items = new List<ItemInfo>
-{
-    new ItemInfo(Convert.ToHexString(RandomNumberGenerator.GetBytes(16)), "apple"),
-    new ItemInfo(Convert.ToHexString(RandomNumberGenerator.GetBytes(16)), "banana"),
-    new ItemInfo(Convert.ToHexString(RandomNumberGenerator.GetBytes(16)), "chocolate")
-};
 
 app.MapGet("/items", (ApplicationDbContext db) => db.Items.ToList());
 
@@ -69,31 +61,19 @@ app.MapPatch("/items/{id}", IResult(int id, SimpleItem value, ApplicationDbConte
     return Results.Ok();
 });
 
-app.MapDelete("/items/{id}", IResult(string id) =>
+app.MapDelete("/items/{id}", IResult(int id, ApplicationDbContext db) =>
 {
-    bool itemExists = items.Any(e => e.Id == id);
+    Item? deleteItem = db.Items.FirstOrDefault(item => item.Id == id);
 
-    if (!itemExists)
-    {
-        return Results.NotFound();
-    }
-    else
-    {
-        ItemInfo? targetItem = items.FirstOrDefault(item => item.Id == id);
+    if(deleteItem == null) return Results.NotFound();
 
-        // 2. 見つかった場合、リストから削除
-        if (targetItem != null)
-        {
-            items.Remove(targetItem);
-            Console.WriteLine($"ID: {id} を削除しました。");
-        }
-        return Results.NoContent();
-    }
+    db.Items.Remove(deleteItem);
+    db.SaveChanges();
+
+    return Results.NoContent();
 });
 
 
 app.Run();
-
-public record ItemInfo(string Id, string Name);
 
 public record SimpleItem(string Name);
