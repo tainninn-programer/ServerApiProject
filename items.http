@@ -1,7 +1,7 @@
 @host = http://localhost:5224
 
 ### 一覧
-GET {{host}}/items/abc
+GET {{host}}/items/
 
 ### 追加
 POST {{host}}/items
@@ -10,7 +10,7 @@ Content-Type: application/json
 {"Name": "melon"}
 
 ### 名前の変更
-PATCH {{host}}/items/609CA0CBB2F918B2F726FAFD63B63E8E
+PATCH {{host}}/items/2
 Content-Type: application/json
 
 {"name": "orangein"}

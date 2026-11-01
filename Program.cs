@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,7 +49,7 @@ app.MapPost("/items", IResult(SimpleItem value, ApplicationDbContext db) =>
     }
 });
 
-app.MapPatch("/items/{id}", IResult(string id, SimpleItem value) =>
+app.MapPatch("/items/{id}", IResult(int id, SimpleItem value, ApplicationDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(value.Name))
     {
@@ -59,21 +60,13 @@ app.MapPatch("/items/{id}", IResult(string id, SimpleItem value) =>
         return Results.ValidationProblem(errors);
     }
     
-    bool itemExists = items.Any(e => e.Id == id);
+    Item? changeItem = db.Items.FirstOrDefault(e => e.Id == id);
 
-    if (!itemExists)
-    {
-        return Results.NotFound();
-    }
-    else
-    {
-        int index = items.FindIndex(e => e.Id == id);
+    if(changeItem == null) return Results.NotFound();
 
-        ItemInfo patchItem = new ItemInfo(id, value.Name);
-        items[index] = patchItem;
-        Console.WriteLine("アイテムを新しいインスタンスに差し替えました。");
-        return Results.Ok();
-    }
+    changeItem.Name = value.Name;
+    db.SaveChanges();
+    return Results.Ok();
 });
 
 app.MapDelete("/items/{id}", IResult(string id) =>
