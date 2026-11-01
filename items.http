@@ -1,20 +1,40 @@
+# 値を変えるときは、ここだけ書き換える
 @host = http://localhost:5224
+@id = 1
+@name = melon
+@newName = orange
 
 ### 一覧
-GET {{host}}/items/2
+GET {{host}}/items
+
+### 1件取得
+GET {{host}}/items/{{id}}
 
 ### 追加
 POST {{host}}/items
 Content-Type: application/json
 
-{"Name": "melon"}
+{"name": "{{name}}"}
 
 ### 名前の変更
-PATCH {{host}}/items/2
+PATCH {{host}}/items/{{id}}
 Content-Type: application/json
 
-{"name": "orangein"}
+{"name": "{{newName}}"}
 
 ### 削除
-DELETE {{host}}/items/3
+DELETE {{host}}/items/{{id}}
 
+### --- 異常系 ---
+
+### 存在しないid
+GET {{host}}/items/999
+
+### 数字でないid
+GET {{host}}/items/abc
+
+### 空の名前で追加
+POST {{host}}/items
+Content-Type: application/json
+
+{"name": ""}
